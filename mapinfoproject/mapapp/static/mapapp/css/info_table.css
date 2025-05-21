@@ -1,0 +1,18 @@
+#info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+}
+#info-table th,
+#info-table td {
+  border: 1px solid #ccc;
+  padding: 4px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+#info-table thead {
+  background: #f0f0f0;
+}
+#info-table tbody tr:nth-child(even) {
+  background: #fafafa;
+}
