@@ -1,51 +1,32 @@
-// map3d_init.js
+let selectedFeatures = {};  
+let infoMap = {};
 
-let vworldMap;
-let selectedFeatures = {};
-let infoMap          = {};
+// ── 1) Configure the global MapOptions as per vWorld sample ───────
+vw.ol3.MapOptions = {
+  basemapType:       vw.ol3.BasemapType.GRAY,       // or HYBRID, ROAD, etc.
+  controlDensity:    vw.ol3.DensityType.LOW,
+  interactionDensity:vw.ol3.DensityType.BASIC,
+  controlsAutoArrange: true,
+  // camera/home positions are 3D‐only, you can omit or leave defaults
+  apiKey:            VWORLD_KEY,
+  center:            new vw.Coord(127.097, 36.8016),
+  zoom:              9
+};
 
+// ── 2) Instantiate the map using that singleton ─────────────────────
 window.addEventListener('load', function() {
-  // ── 1) Your original map options ────────────────────────────────
-  const options = {
-    mapId:       'map3d',
-    apiKey:      VWORLD_KEY,
-    initPosition: new vw.CameraPosition(
-      new vw.CoordZ(127.097, 36.8016, 5000),  // back to 5000 m
-      new vw.Direction(0, -90, 0)
-    ),
-    logo:        true,
-    navigation:  true
-  };
+    const olMap = vworldMap.map;
 
-  // ── 2) Instantiate & configure map ─────────────────────────────
-  vworldMap = new vw.Map();
-  vworldMap.setOption(options);
+  // ── 3) Handle clicks via OL3 singleclick ──────────────────────────
+  olMap.on('singleclick', function(evt) {
+    // evt.coordinate is [lon, lat]
+    const [lon, lat] = evt.coordinate;
+    wfsEvent(lon, lat);
+  });
 
-  // ── 3) Inject your WMS overlay once Cesium is ready ─────────────
-  vw.ws3dInitCallBack = function() {
-    const wmsLayer  = new vw.Layers();
-    const wmsSource = new vw.source.TileWMS();
-    wmsSource.setParams("tilesize=256");
-    wmsSource.setLayers("lp_pa_cbnd_bubun");
-    wmsSource.setStyles("lp_pa_cbnd_bubun_webgl");
-    wmsSource.setFormat("image/png");
-    wmsSource.setUrl(
-      `https://api.vworld.kr/req/wms?key=${VWORLD_KEY}` +
-      `&domain=${location.origin}&`
-    );
-    const wmsTile = new vw.layer.Tile(wmsSource);
-    wmsLayer.add(wmsTile);
-  };
-
-  // ── 4) Start the map & hook your click handler ─────────────────
-  vworldMap.start();
-  vworldMap.onClick.addEventListener(wfsEvent);
-
-  // ── 5) “모두 해제” button ────────────────────────────────────────
+  // ── 4) “모두 해제” button ───────────────────────────────────────────
   document.getElementById('unselectall').addEventListener('click', () => {
-    for (const pnu in selectedFeatures) {
-      selectedFeatures[pnu].hide();
-    }
+    Object.values(selectedFeatures).forEach(f => f.hide());
     selectedFeatures = {};
 
     const tbody = document.querySelector('#info-table tbody');
@@ -53,27 +34,27 @@ window.addEventListener('load', function() {
     infoMap = {};
   });
 
-  // ── 6) “CSV 내보내기” button ───────────────────────────────────
+  // ── 5) “CSV 내보내기” button ─────────────────────────────────────
   document.getElementById('export-csv').addEventListener('click', () => {
     const ts = new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
     exportTableToCSV(`parcels-${ts}.csv`);
   });
 });
 
-function wfsEvent(windowPosition, ecefPosition, cartographic) {
-  const lon = cartographic.longitudeDD;
-  const lat = cartographic.latitudeDD;
+// ── 6) Your existing WFS → highlight → table logic ─────────────────
+function wfsEvent(lon, lat) {
   const [dx, dy] = getBuffer();
   const bbox = [lon - dx, lat - dy, lon + dx, lat + dy].join(',');
 
   fetch(`/api/landuse_wfs/?bbox=${encodeURIComponent(bbox)}`)
-    .then(r => { if (!r.ok) throw new Error(`WFS proxy error: ${r.status}`); return r.json(); })
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
     .then(geojson => {
       const features = geojson.features || [];
       if (!features.length) return;
+
       const primaryPnu = features[0].properties.pnu;
 
-      // toggle-off
+      // Toggle off only the primary parcel if already selected
       if (selectedFeatures[primaryPnu]) {
         selectedFeatures[primaryPnu].hide();
         delete selectedFeatures[primaryPnu];
@@ -81,32 +62,34 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
         return;
       }
 
-      // highlight all returned parcels
+      // Otherwise highlight & info for all returned parcels
       features.forEach(feat => {
         const pnu = feat.properties.pnu;
         if (selectedFeatures[pnu]) return;
 
+        // Highlight in the vWorld 2D view via GMLParser (works in 2D too)
         const parser = new vw.GMLParser();
         parser.setId(`sel-${pnu}`);
-        const feature3d = parser.read(
+        const feature2d = parser.read(
           vw.GMLParserType.GEOJSON,
           `/api/landuse_wfs/?bbox=${encodeURIComponent(bbox)}`,
           'EPSG:4326'
         );
-        feature3d.setOption({
-          // sit exactly on the land surface:
-            isTerrain:     false,      // still not draped to terrain mesh
-            clampToGround: true,       // forces coords down to ground
-            // height:      0,         // no extra lift
-        
-            // your fill only—no outline
-            material:      new vw.Color(0,255,0,255).ws3dColor.withAlpha(0.5),
-            outline:       false
+        feature2d.setOption({
+          isTerrain:     false,
+          clampToGround: false,
+          height:        0,
+          material:      new vw.Color(0,255,0,255).olColor.withAlpha(0.5),
+          outline:       true,
+          outlineColor:  new vw.Color(255,0,0,255).olColor,
+          outlineWidth:  2
         });
-        feature3d.makeCoords();
-        feature3d.show();
-        selectedFeatures[pnu] = feature3d;
+        feature2d.makeCoords();
+        feature2d.show();
 
+        selectedFeatures[pnu] = feature2d;
+
+        // Append info row
         fetch(`/api/pnu_info/?pnu=${pnu}&year=2024`)
           .then(r => r.json())
           .then(data => addInfo(pnu, data.characteristics, data.addr, data.jibun))
@@ -119,6 +102,7 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
 function addInfo(pnu, info, addr, jibun) {
   const tbody = document.querySelector('#info-table tbody');
   if (infoMap[pnu]) return;
+
   const tr = document.createElement('tr');
   tr.id = `info-${pnu}`;
   tr.innerHTML = `
@@ -143,17 +127,12 @@ function addInfo(pnu, info, addr, jibun) {
 
 function removeInfo(pnu) {
   const tr = infoMap[pnu];
-  if (tr) tr.remove();
-  delete infoMap[pnu];
+  if (tr) { tr.remove(); delete infoMap[pnu]; }
 }
 
 function getBuffer() {
-  const pos = vworldMap.getCurrentPosition().position;
-  const z   = pos.z;
-  const baseDx = 1/(111000/z * 1.48 * 50);
-  const baseDy = 1/(111000/z * 1.85 * 50);
-  const scale  = 0.001;  // your original scale
-  return [ baseDx * scale, baseDy * scale ];
+  // small degree-based buffer
+  return [0.00005, 0.00005];
 }
 
 function exportTableToCSV(filename) {
@@ -163,7 +142,6 @@ function exportTableToCSV(filename) {
       .map(cell => `"${cell.textContent.trim().replace(/"/g,'""')}"`)
       .join(',')
   ).join('\n');
-
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
