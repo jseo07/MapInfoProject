@@ -14,35 +14,41 @@
 
 {% block content %}
   <div class="map-info-container">
-    <div id="map3d" style="width:90%; height:80vh;"></div>
+    <div class="left-column-container">
+        <div id="map3d" style="width:90%; height:80vh;"></div>
+        <button id="unselectall">모두 해제</button>
+    </div>
+    <div class="right-column-container">
         <div id="info">
-        <table id="info-table">
-            <thead>
-            <tr>
-                <th>지적구역명</th>
-                <th>지번</th>
-                <th>지형고도코드명</th>
-                <th>기준연도</th>
-                <th>지목명</th>
-                <th>도로접도구분명</th>
-                <th>개별공시지가(₩/㎡)</th>
-                <th>용도지역1명</th>
-                <th>용도지역2명</th>
-                <th>토지이용상황명</th>
-                <th>최종갱신일자</th>
-                <th>등록구분명</th>
-                <th>지번면적(㎡)</th>
-                <th>지형형상코드명</th>
-            </tr>
-            </thead>
-            <tbody>
-            <!-- rows will be appended here -->
-            </tbody>
-        </table>
-  </div>
+            <table id="info-table">
+                <thead>
+                <tr>
+                    <th>지적구역명</th>
+                    <th>지번</th>
+                    <th>지형고도코드명</th>
+                    <th>기준연도</th>
+                    <th>지목명</th>
+                    <th>도로접도구분명</th>
+                    <th>개별공시지가(₩/㎡)</th>
+                    <th>용도지역1명</th>
+                    <th>용도지역2명</th>
+                    <th>토지이용상황명</th>
+                    <th>최종갱신일자</th>
+                    <th>등록구분명</th>
+                    <th>지번면적(㎡)</th>
+                    <th>지형형상코드명</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- rows will be appended here -->
+                </tbody>
+            </table>
+        </div>
+        <button id="export-csv">CSV 내보내기</button>
+    </div>
+  
   
 </div>
-  <button id="unselectall">모두 해제</button>
 {% endblock %}
 
 {% block extra_js %}

@@ -38,70 +38,73 @@ window.addEventListener('load', function() {
     infoMap = {};
 
     });
+    // wire up the button
+    document.getElementById('export-csv').addEventListener('click', () => {
+        const ts = new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
+        exportTableToCSV(`parcels-${ts}.csv`);
+    });
 });
 
-function wfsEvent(windowPosition, ecefPosition, cartographic, featureInfo, event) {
+function wfsEvent(windowPosition, ecefPosition, cartographic) {
   const lon = cartographic.longitudeDD;
   const lat = cartographic.latitudeDD;
-  const [dx, dy] = getBuffer();  
-  const minLon = lon - dx;
-  const minLat = lat - dy;
-  const maxLon = lon + dx;
-  const maxLat = lat + dy;
-  const bbox   = `${minLon},${minLat},${maxLon},${maxLat}`;
+  const [dx, dy] = getBuffer();
+  const bbox = [lon - dx, lat - dy, lon + dx, lat + dy].join(',');
 
-
-  // Build a proper ogc Filter string
-    const url = `/api/landuse_wfs/?bbox=${encodeURIComponent(bbox)}`;
-
+  const url = `/api/landuse_wfs/?bbox=${encodeURIComponent(bbox)}`;
   fetch(url)
-    .then(res => {
-      if (!res.ok) throw new Error(`WFS proxy error: ${res.status}`);
-      return res.json();
+    .then(r => {
+      if (!r.ok) throw new Error(`WFS proxy error: ${r.status}`);
+      return r.json();
     })
     .then(geojson => {
-      // If nothing returned, do nothing
-      if (!geojson.features.length) return;
+      const features = geojson.features || [];
+      if (!features.length) return;
 
-      const props  = geojson.features[0].properties;
-      const pnu = props.pnu;
-      fetch(`/api/pnu_info/?pnu=${pnu}&year=2024`)
-        .then(r => r.json())
-        .then(data => {
-            console.log('토지 특성:',    data.characteristics);
-            // e.g. update your info panel with these additional fields…
-        });
+      // 1) Build an array of all returned PNUs
+      const returnedPNUs = features.map(f => f.properties.pnu);
 
-
-      if (selectedFeatures[pnu]) {
-        selectedFeatures[pnu].hide();
-        delete selectedFeatures[pnu];
-        removeInfo(pnu);
-        return;
+      // 2) If any returned PNU is already selected, toggle *that* one OFF
+      for (const rPnu of returnedPNUs) {
+        if (selectedFeatures[rPnu]) {
+          // hide its highlight
+          selectedFeatures[rPnu].hide();
+          delete selectedFeatures[rPnu];
+          // remove its info row from the table
+          const tr = infoMap[rPnu];
+          if (tr) {
+            tr.parentNode.removeChild(tr);
+            delete infoMap[rPnu];
+          }
+          return;
+        }
       }
 
-      const parser  = new vw.GMLParser();
-      parser.setId(`sel-${pnu}`);
-      const feature = parser.read(
+      // 3) Otherwise, pick the first feature and highlight it
+      const feat     = features[0];
+      const newPnu   = feat.properties.pnu;
+      const parser   = new vw.GMLParser();
+      parser.setId(`sel-${newPnu}`);
+      const feature3d = parser.read(
         vw.GMLParserType.GEOJSON,
         url,
         'EPSG:4326'
       );
-
-      feature.setOption({
-        isTerrain:     true,
-        material:      new vw.Color(0, 255, 0, 255).ws3dColor.withAlpha(0.5),
+      feature3d.setOption({
+        isTerrain: true,
+        material:  new vw.Color(0,255,0,255).ws3dColor.withAlpha(0.5),
         outline:       false,
         clampToGround: true
       });
-      feature.makeCoords();
-      feature.show();
+      feature3d.makeCoords();
+      feature3d.show();
 
-      selectedFeatures[pnu] = feature;
-      
-      fetch(`/api/pnu_info/?pnu=${pnu}&year=2024`)
+      selectedFeatures[newPnu] = feature3d;
+
+      // 4) Fetch and append its info row
+      fetch(`/api/pnu_info/?pnu=${newPnu}&year=2024`)
         .then(r=>r.json())
-        .then(data => addInfo(pnu, data.characteristics, data.addr, data.jibun))
+        .then(data => addInfo(newPnu, data.characteristics, data.addr, data.jibun))
         .catch(console.error);
     })
     .catch(console.error);
@@ -152,3 +155,24 @@ function getBuffer() {
 
 
 
+
+function exportTableToCSV(filename) {
+  const rows = Array.from(document.querySelectorAll('#info-table tr'));
+  const csv = rows.map(row => {
+    // grab text from each cell (th or td)
+    const cells = Array.from(row.querySelectorAll('th,td'))
+      .map(cell => `"${cell.textContent.trim().replace(/"/g,'""')}"`);
+    return cells.join(',');
+  }).join('\n');
+
+  // create a Blob, make a URL, and simulate a click
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
