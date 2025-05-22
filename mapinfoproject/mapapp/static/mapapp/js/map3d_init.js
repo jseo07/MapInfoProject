@@ -95,13 +95,13 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
         );
         feature3d.setOption({
           // sit exactly on the land surface:
-            isTerrain:     false,      // still not draped to terrain mesh
-            clampToGround: true,       // forces coords down to ground
-            // height:      0,         // no extra lift
-        
-            // your fill only—no outline
-            material:      new vw.Color(0,255,0,255).ws3dColor.withAlpha(0.5),
-            outline:       false
+        isTerrain:     false,      // still not draped to terrain mesh
+        clampToGround: true,       // forces coords down to ground
+        // height:      0,         // no extra lift
+    
+        // your fill only—no outline
+        material:      new vw.Color(0,255,0,255).ws3dColor.withAlpha(0.5),
+        outline:       false
         });
         feature3d.makeCoords();
         feature3d.show();
