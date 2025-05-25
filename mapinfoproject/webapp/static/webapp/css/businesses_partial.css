@@ -1,0 +1,93 @@
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  font-size: 1.125rem;
+  font-weight: 400;
+  text-align: center;
+  color: #666;
+  margin-bottom: 3rem;
+  line-height: 1.4;
+}
+
+/* Grid container */
+
+.business-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* Card */
+.business-card {
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Image & overlay label */
+.card-image {
+  position: relative;
+}
+.card-image img {
+  width: 100%;
+  display: block;
+}
+
+/* Body & text */
+.card-body {
+  background: #f4f4f4;
+  padding: 1.5rem;
+  padding-bottom: 4rem;       /* add extra space at the bottom for the + button */
+
+}
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+.card-desc {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Floating “+” button */
+.card-action {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 3rem;
+  height: 3rem;
+  background: var(--primary-color);
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 3rem;
+  font-size: 1.5rem;
+  text-decoration: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s;
+}
+.card-action:hover {
+  background: var(--accent-color);
+}
+
+/* Mobile fallback: single column */
+@media (max-width: 768px) {
+  .business-grid {
+    grid-template-columns: 1fr;
+    padding: 0 2rem;
+  }
+  .card-label {
+    transform: translate(-50%, 50%) scale(0.9);
+  }
+
+}

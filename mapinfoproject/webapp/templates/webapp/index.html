@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}SP-에스피개발{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'webapp/css/index.css' %}">
+  <link rel="stylesheet" href="{% static 'webapp/css/about_partial.css' %}">
+  <link rel="stylesheet" href="{% static 'webapp/css/businesses_partial.css' %}">
+  <link rel="stylesheet" href="{% static 'webapp/css/contact_cta.css' %}">
+  <link rel="stylesheet" href="{% static 'webapp/css/index_cascade.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="sections-container">
+  <!-- ▶ Hero Section -->
+  <section class="section hero">
+    <div class="hero-content">
+      <h1>에스피개발 주식회사</h1>
+      <p class="subtitle">서브 타이틀</p>
+    </div>
+    <div class="hero-nav">
+      <button class="hero-nav__btn active" data-target="section1">회사소개</button>
+      <button class="hero-nav__btn"      data-target="section2">주요업무사항</button>
+    </div>
+  </section>
+
+  <!-- ▶ Section 1 -->
+<div id="section1" class="section-content active">
+    {% include 'webapp/partials/about_partial.html' %}
+  </div>
+
+  <!-- ▶ Section 2 -->
+  <div id="section2" class="section-content">
+    <div class="container">
+      <h2 class="section-title">주요업무사항</h2>
+      <p class="section-subtitle">
+        기업과 사업, 사업과 사람, 사람과 기업의 상호작용을 통한 혁신과 발전
+      </p>
+      {% url 'webapp_under_construction' as under_construction_url %}
+      <div class="business-grid">
+        {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/project1.jpg' title='뭐시기 사업 1' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
+        
+        {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/background.jpg' title='뭐시기 사업 2' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
+        
+        {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/about-bg.jpg' title='뭐시기 사업 3' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
+      </div>
+    </div>
+  </div>
+
+  <div id="section3" class="section-content">
+    <div class="contact-cta-full">
+      <p class="contact-cta-full__text">
+        궁금하신 사항이 있으시면 아래 버튼을 클릭해주세요!
+      </p>
+      <a href="{% url 'webapp_contact' %}" class="contact-cta-full__btn">
+        문의하기
+      </a>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'webapp/js/index.js' %}"></script>
+{% endblock %}

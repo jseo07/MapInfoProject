@@ -1,0 +1,11 @@
+{% load static %}
+<div class="business-card">
+  <div class="card-image">
+    <img src="{% static image %}" alt="{{ title }}">
+  </div>
+  <div class="card-body">
+    <h3 class="card-title">{{ title }}</h3>
+    <p class="card-desc">{{ description }}</p>
+  </div>
+  <a href="{{ link }}" class="card-action">+</a>
+</div>

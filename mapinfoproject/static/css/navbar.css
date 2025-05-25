@@ -1,0 +1,122 @@
+.navbar {
+  /* gradient fade from semi-opaque white down to fully transparent */
+  background: transparent;
+  border-bottom: none;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar.scrolled {
+  /* solid white background */
+  background: WHITE;
+  /* subtle bottom shadow to lift off the page */
+  box-shadow:
+    /* big, soft shadow */
+    0 20px 30px -10px rgba(0, 0, 0, 0.15),
+    /* secondary, more subtle shadow */
+    0 10px 20px -10px rgba(0, 0, 0, 0.1);
+
+  /* ensure nothing is clipping the shadow */
+  overflow: visible;
+  z-index: 1000;
+
+}
+
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--navbar-height);
+}
+.navbar .logo a,
+.navbar .navbar-menu a {
+  color: white;
+}
+
+/* On scroll: black text */
+.navbar.scrolled .logo a,
+.navbar.scrolled .navbar-menu a {
+  color: black;
+}
+.logo a {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.navbar-menu ul {
+  list-style: none;
+  display: flex;
+}
+
+.navbar-menu li {
+  margin-left: 1.5rem;
+}
+
+.navbar-menu a {
+  font-size: 1rem;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-menu a:hover {
+  color: var(--primary-color);
+}
+
+.navbar.scrolled .navbar-menu a:hover {
+  color: var(--primary-color);
+}
+
+.navbar-toggle {
+  display: none;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .navbar-menu {
+    position: absolute;
+    top: var(--navbar-height);
+    left: 0;
+    width: 100%;
+    background: var(--secondary-color);
+    display: none;
+    flex-direction: column;
+    border-bottom: 1px solid #eee;
+  }
+
+  .navbar-menu.active {
+    display: flex;
+  }
+
+  .navbar-menu ul {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .navbar-menu li {
+    margin: 0;
+    border-top: 1px solid #eee;
+  }
+
+  .navbar-menu a {
+    display: block;
+    padding: 1rem;
+  }
+
+  .navbar-toggle {
+    display: block;
+  }
+}
+
+.logo-image {
+  /* scale image to about 80% of navbar height */
+  height: calc(var(--navbar-height) * 0.6);
+  width: auto;
+  display: block;
+}

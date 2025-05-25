@@ -56,7 +56,7 @@ window.addEventListener('load', function() {
   // ── 6) “CSV 내보내기” button ───────────────────────────────────
   document.getElementById('export-csv').addEventListener('click', () => {
     const ts = new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
-    exportTableToCSV(`parcels-${ts}.csv`);
+    exportTableToExcel(`parcels-${ts}.csv`);
   });
 });
 
@@ -66,7 +66,7 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
   const [dx, dy] = getBuffer();
   const bbox = [lon - dx, lat - dy, lon + dx, lat + dy].join(',');
 
-  fetch(`/api/landuse_wfs/?bbox=${encodeURIComponent(bbox)}`)
+  fetch(`/mapapp/api/landuse_wfs/?bbox=${encodeURIComponent(bbox)}`)
     .then(r => { if (!r.ok) throw new Error(`WFS proxy error: ${r.status}`); return r.json(); })
     .then(geojson => {
       const features = geojson.features || [];
@@ -90,7 +90,7 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
         parser.setId(`sel-${pnu}`);
         const feature3d = parser.read(
           vw.GMLParserType.GEOJSON,
-          `/api/landuse_wfs/?bbox=${encodeURIComponent(bbox)}`,
+          `/mapapp/api/landuse_wfs/?bbox=${encodeURIComponent(bbox)}`,
           'EPSG:4326'
         );
         feature3d.setOption({
@@ -107,7 +107,7 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
         feature3d.show();
         selectedFeatures[pnu] = feature3d;
 
-        fetch(`/api/pnu_info/?pnu=${pnu}&year=2024`)
+        fetch(`/mapapp/api/pnu_info/?pnu=${pnu}&year=2024`)
           .then(r => r.json())
           .then(data => addInfo(pnu, data.characteristics, data.addr, data.jibun))
           .catch(console.error);
@@ -174,3 +174,16 @@ function exportTableToCSV(filename) {
   a.remove();
   URL.revokeObjectURL(url);
 }
+
+function exportTableToExcel(filename) {
+  // Convert the table #info-table into a SheetJS workbook:
+  const table = document.getElementById('info-table');
+  const workbook = XLSX.utils.table_to_book(table, { sheet: "Parcels" });
+
+  // Ensure filename ends with .xlsx
+  const name = filename.endsWith('.xlsx') ? filename : filename + '.xlsx';
+
+  // Write and trigger download
+  XLSX.writeFile(workbook, name);
+}
+

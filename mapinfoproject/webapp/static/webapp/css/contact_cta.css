@@ -1,0 +1,35 @@
+.section-content{
+    padding: 0;
+}
+.contact-cta-full {
+  width: 100%;
+  background: rgba(239, 109, 31, 0.05);
+  color: #000000;                /* black text */
+  text-align: center;
+  padding: 3rem 1rem;
+  border-radius: 0;
+  box-sizing: border-box;
+}
+
+.contact-cta-full__text {
+  font-size: 1.1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  color: inherit;                /* inherit black text */
+}
+
+.contact-cta-full__btn {
+  display: inline-block;
+  background: var(--primary-color);    /* orange button */
+  color: var(--secondary-color);       /* white text */
+  padding: 1rem 2rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.contact-cta-full__btn:hover {
+  background: var(--accent-color);     /* blue on hover */
+  color: var(--secondary-color);       /* keep white text */
+}

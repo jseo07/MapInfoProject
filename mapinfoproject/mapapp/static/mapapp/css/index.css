@@ -11,10 +11,35 @@
   box-sizing: border-box;
 }
 
+.navbar {
+  /* solid white background */
+  background: WHITE;
+  /* subtle bottom shadow to lift off the page */
+  box-shadow:
+    /* big, soft shadow */
+    0 20px 30px -10px rgba(0, 0, 0, 0.15),
+    /* secondary, more subtle shadow */
+    0 10px 20px -10px rgba(0, 0, 0, 0.1);
+
+  /* ensure nothing is clipping the shadow */
+  overflow: visible;
+  z-index: 1000;
+}
+
+.navbar .logo a,
+.navbar .navbar-menu a {
+  color: black;
+}
+
+.navbar-menu a:hover {
+  color: var(--primary-color);
+}
+
 /*──────────────────────────────────────────────────────────────────────────*/
 /* 2) Left column: map + unselect button                                    */
 /*──────────────────────────────────────────────────────────────────────────*/
 .left-column-container {
+  margin-top:var(--navbar-height);
   flex: 1 1 500px;
   min-width: 300px;
   display: flex;
@@ -46,6 +71,7 @@
 /* 3) Right column: table + export button                                  */
 /*──────────────────────────────────────────────────────────────────────────*/
 .right-column-container {
+  margin-top:var(--navbar-height);
   flex: 1 1 500px;
   min-width: 300px;
   display: flex;

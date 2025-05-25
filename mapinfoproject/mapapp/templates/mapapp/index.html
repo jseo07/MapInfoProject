@@ -15,7 +15,8 @@
 {% endblock %}
 
 {% block content %}
-  <div class="map-info-container">
+<div class="mapallcontainer">
+    <div class="map-info-container">
     <div class="left-column-container">
         <div id="map3d" style="width:90%; height:80vh;"></div>
         <button id="unselectall">모두 해제</button>
@@ -46,14 +47,17 @@
                 </tbody>
             </table>
         </div>
-        <button id="export-csv">CSV 내보내기</button>
+        <button id="export-csv">엑셀 파일 내보내기</button>
     </div>
   
   
 </div>
+</div>
+  
 {% endblock %}
 
 {% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <script>
     const VWORLD_KEY = encodeURIComponent("{{ VWORLD_API_KEY }}");

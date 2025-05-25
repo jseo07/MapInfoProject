@@ -1,0 +1,28 @@
+{% load static %}
+<header class="navbar">
+  <div class="container navbar-container">
+    <div class="logo">
+      <a href="/">
+        <img
+          id="logo-img"
+          src="{% static 'images/logo-bright.png' %}" 
+          data-src-top="{% static 'images/logo-bright.png' %}"
+          data-src-scrolled="{% static 'images/logo.png' %}"
+          alt="SP Development Logo"
+          class="logo-image"
+        >
+  </a>
+    </div>
+
+    <nav id="navbar-menu" class="navbar-menu">
+      <ul>
+        <li><a href="/">회사소개</a></li>
+        <li><a href="/what-we-do/">주요업무사항</a></li>
+        <li><a href="{% url 'webapp_contact' %}">문의</a></li>
+        <li><a href="{% url 'mapapp:map_index' %}">지도거시기</a></li>
+      </ul>
+    </nav>
+
+    <button id="nav-toggle" class="navbar-toggle">&#9776;</button>
+  </div>
+</header>

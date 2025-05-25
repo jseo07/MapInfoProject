@@ -1,0 +1,71 @@
+
+/* === Keyframes === */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Hero: only fade (preserves its translateX/translateY centering) === */
+.section.hero .hero-content,
+.section.hero .hero-nav {
+  opacity: 0;
+}
+.section.hero .hero-content {
+  animation: fadeIn 0.6s ease-out forwards 0.2s;
+}
+.section.hero .hero-nav {
+  animation: fadeIn 0.6s ease-out forwards 0.4s;
+}
+
+/* === About section: slide up & fade === */
+.section-content.active .about-section {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease-out forwards 0.2s;
+}
+
+/* === Business section header & subtitle === */
+.section-content.active .section-title {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease-out forwards 0.2s;
+}
+.section-content.active .section-subtitle {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease-out forwards 0.4s;
+}
+
+/* === Business cards cascade === */
+.section-content.active .business-card {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease-out forwards;
+}
+.section-content.active .business-grid .business-card:nth-child(1) {
+  animation-delay: 0.6s;
+}
+.section-content.active .business-grid .business-card:nth-child(2) {
+  animation-delay: 0.8s;
+}
+.section-content.active .business-grid .business-card:nth-child(3) {
+  animation-delay: 1s;
+}
+
+/* === Contact CTA slide up & fade === */
+.section-content.active .contact-cta-full {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideUp 0.6s ease-out forwards 0.2s;
+}

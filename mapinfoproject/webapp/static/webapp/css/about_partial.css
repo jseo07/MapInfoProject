@@ -1,0 +1,77 @@
+/* === About Two-Col Section === */
+.about-section {
+  padding: 4rem 0;
+}
+
+.about-container {
+  display: flex;
+  align-items: stretch;  /* make columns equal height */
+  gap: 2rem;
+}
+
+/* Left column: image fills fully */
+.about-image {
+  flex: 1;
+}
+.about-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Right column: text + button */
+.about-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.about-content h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.5rem;
+}
+
+.about-subtitle {
+  font-size: 1.1rem;       /* slightly smaller than the main title */
+  font-weight: 400;         /* normal weight */
+  color: #555;              /* medium-dark gray for contrast */
+  margin-bottom: 1.5rem;    /* space before the paragraph */
+  line-height: 1.4;         /* a bit tighter than body text */
+}
+
+
+.about-content p {
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+/* Button at bottom-right of the text column */
+.btn-about {
+  align-self: flex-start;        /* stick to left of its column */
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 1rem 2rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background 0.2s ease;
+}
+.btn-about:hover {
+  background: var(--accent-color);
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 768px) {
+  .about-container {
+    flex-direction: column;
+  }
+  .about-image,
+  .about-content {
+    width: 100%;
+  }
+  .about-content {
+    margin-top: 2rem;
+  }
+}
