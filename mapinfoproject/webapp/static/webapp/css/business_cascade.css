@@ -1,0 +1,76 @@
+/* Cascade Animations for Portfolio Page */
+
+/* 1) Keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 2) Initial hidden state */
+/* Hero fades only (keep its centering transform intact) */
+.section.hero .hero-content,
+.section.hero .subtitle {
+  opacity: 0;
+}
+
+/* Section title/subtitle slide & fade */
+.section-content .section-title,
+.section-content .section-subtitle {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Business cards slide & fade */
+.business-grid .business-card {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* 3) Trigger animations on page load */
+/* Hero */
+.section.hero .hero-content {
+  animation: fadeIn 0.6s ease-out forwards 0.2s;
+}
+.section.hero .subtitle {
+  animation: fadeIn 0.6s ease-out forwards 0.4s;
+}
+
+/* Section header */
+.section-content .section-title {
+  animation: fadeInUp 0.6s ease-out forwards 0.6s;
+}
+.section-content .section-subtitle {
+  animation: fadeInUp 0.6s ease-out forwards 0.8s;
+}
+
+/* Business-card cascade */
+.business-grid .business-card:nth-child(1) {
+  animation: fadeInUp 0.6s ease-out forwards 1.0s;
+}
+.business-grid .business-card:nth-child(2) {
+  animation: fadeInUp 0.6s ease-out forwards 1.2s;
+}
+.business-grid .business-card:nth-child(3) {
+  animation: fadeInUp 0.6s ease-out forwards 1.4s;
+}
+.business-grid .business-card:nth-child(4) {
+  animation: fadeInUp 0.6s ease-out forwards 1.6s;
+}
+.business-grid .business-card:nth-child(5) {
+  animation: fadeInUp 0.6s ease-out forwards 1.8s;
+}
+.business-grid .business-card:nth-child(6) {
+  animation: fadeInUp 0.6s ease-out forwards 2.0s;
+}
+
+/* (Add more nth-child rules if you have more cards) */

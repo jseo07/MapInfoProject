@@ -1,0 +1,156 @@
+
+.about-container{
+    max-width: 1000px;
+    margin: 0 auto;        /* centers it horizontally */
+  padding: 0 1rem;       /* optional small side padding */
+  box-sizing: border-box;
+
+}
+.about-container section {
+  width: 100%;
+}
+
+/* (Optional) Add vertical spacing between sections */
+.about-container section + section {
+  margin-top: 3rem;
+}
+
+.hero {
+  background: url('../images/background.jpg') no-repeat center center;
+  background-size: cover;
+  height: 40vh;
+  position: relative;
+scroll-snap-align: start;            /* snap its top to the viewport top */
+
+  /* Pull up under the navbar */
+  margin-top: calc(-1 * var(--navbar-height));
+  /* Compensate so the section still fills screen */
+  padding-top: var(--navbar-height);
+
+}
+
+.hero-content {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: white;
+}
+.hero-content h1{
+  font-size: 4rem;
+  white-space: nowrap;
+}
+.subtitle {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+}
+
+/* === Company Intro === */
+.company-intro {
+  padding: 2rem 1rem;
+}
+.company-intro h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+.intro-wrapper {
+  overflow: hidden; /* contain floated image */
+}
+.intro-image {
+  float: left;
+  width: 50%;
+  margin: 0 1rem 1rem 0;
+  object-fit: cover;
+}
+.company-intro p {
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* === Company Overview === */
+.company-overview {
+  padding: 3rem 5rem;
+  background: #f9f9f9;
+}
+.company-overview h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--primary-color);
+}
+.overview-list {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  row-gap: 0.5rem;
+  column-gap: 1rem;
+}
+.overview-list dt {
+  font-weight: 600;
+  color: #333;
+  padding: 0.5rem 0;
+}
+.overview-list dd {
+  margin: 0;
+  color: #555;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0.5rem 0;   /* vertical breathing room */
+}
+
+/* === Business Overview === */
+.business-overview {
+  padding: 3rem 5rem;
+  margin-bottom: 3rem;
+  background-color: #eeeeee;
+}
+.business-overview h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.business-overview p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+.overview-list dd:last-of-type {
+  border-bottom: none;
+}
+/* Button */
+.btn-primary {
+  display: inline-block;
+  background: var(--primary-color);
+  color: var(--secondary-color);
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+.btn-primary:hover {
+  background: var(--accent-color);
+}
+
+
+/* Responsive: stack image above text on small */
+@media (max-width: 768px) {
+  .intro-image {
+    float: none;
+    width: 100%;
+    margin: 0 0 1rem 0;
+  }
+
+  .company-overview {
+    padding: 2rem 1.5rem;
+    background: #f9f9f9;
+}
+
+    .hero-content h1{
+    font-size: 2.5rem;
+    white-space: nowrap;
+    }
+
+    .business-overview {
+  padding: 2rem 1.5rem;
+}
+}

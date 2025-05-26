@@ -9,3 +9,10 @@ def under_construction(request):
 
 def contact(request):
     return render(request, 'webapp/contact.html')
+
+
+def about(request):
+    return render(request, 'webapp/about.html')
+
+def business(request):
+    return render(request, 'webapp/business.html')

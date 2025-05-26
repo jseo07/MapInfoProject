@@ -1,0 +1,29 @@
+.hero {
+    height: 40vh;
+}
+
+.hero-content {
+  top: 60%;
+  left: 50%;
+}
+
+#section2{
+    padding-bottom: 6rem;
+}
+
+.section-subtitle{
+    color: black;
+    font-size: 1.1rem;
+}
+
+.section-title{
+    margin-bottom: 2rem;
+}
+
+html {
+  /* instead of “y mandatory”: */
+  scroll-snap-type: y proximity;
+  scroll-padding-top: var(--navbar-height);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}

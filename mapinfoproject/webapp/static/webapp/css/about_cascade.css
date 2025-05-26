@@ -1,0 +1,48 @@
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === 2) Initial hidden state === */
+.section.hero .hero-content,
+.section.hero .subtitle {
+  opacity: 0;
+  /* don’t touch “transform” here – we need the translate(-50%, -50%) centering */
+}
+
+/* Everything else still slides up */
+.company-intro,
+.company-overview,
+.business-overview {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Hero fade only */
+.section.hero .hero-content {
+  animation: fadeIn 0.6s ease-out forwards 0.2s;
+}
+.section.hero .subtitle {
+  animation: fadeIn 0.6s ease-out forwards 0.4s;
+}
+
+/* Slide-up for the other sections */
+.company-intro {
+  animation: fadeInUp 0.6s ease-out forwards 0.6s;
+}
+.company-overview {
+  animation: fadeInUp 0.6s ease-out forwards 0.8s;
+}
+.business-overview {
+  animation: fadeInUp 0.6s ease-out forwards 1s;
+}

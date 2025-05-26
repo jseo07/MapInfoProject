@@ -16,8 +16,8 @@
 
     <nav id="navbar-menu" class="navbar-menu">
       <ul>
-        <li><a href="/">회사소개</a></li>
-        <li><a href="/what-we-do/">주요업무사항</a></li>
+        <li><a href="{% url 'webapp_about' %}">회사소개</a></li>
+        <li><a href="{% url 'webapp_business' %}">주요업무사항</a></li>
         <li><a href="{% url 'webapp_contact' %}">문의</a></li>
         <li><a href="{% url 'mapapp:map_index' %}">지도거시기</a></li>
       </ul>

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}SP-에스피개발: 주요업무사항{% endblock %}
+
+{% block extra_css %}
+
+  <link rel="stylesheet" href="{% static 'webapp/css/index.css' %}">
+  <link rel="stylesheet" href="{% static 'webapp/css/businesses_partial.css' %}">
+  <link rel="stylesheet" href="{% static 'webapp/css/business.css' %}">
+  <link rel="stylesheet" href="{% static 'webapp/css/business_cascade.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+<section class="section hero">
+    <div class="hero-content">
+      <h1>에스피개발 주식회사</h1>
+      <p class="subtitle">주요업무사항</p>
+    </div>
+  </section>
+<div class="about-container">
+
+<div id="section2" class="section-content">
+    <div class="container">
+      <h2 class="section-title">Portfolio</h2>
+      <p class="section-subtitle">
+        뭐 이런일도 하고 저런일도 하고 그런일도 하고
+      </p>
+      {% url 'webapp_under_construction' as under_construction_url %}
+      <div class="business-grid">
+        {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/project1.jpg' title='뭐시기 사업 1' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
+        
+        {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/background.jpg' title='뭐시기 사업 2' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
+        
+        {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/about-bg.jpg' title='뭐시기 사업 3' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
+
+        {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/about-bg.jpg' title='뭐시기 사업 3' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
+
+        {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/about-bg.jpg' title='뭐시기 사업 3' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
+
+        {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/about-bg.jpg' title='뭐시기 사업 3' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}

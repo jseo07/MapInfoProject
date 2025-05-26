@@ -68,6 +68,7 @@ scroll-snap-align: start;            /* snap its top to the viewport top */
 }
 .hero-content h1{
   font-size: 4rem;
+  white-space: nowrap;
 }
 .subtitle {
   margin-top: 0.5rem;
@@ -112,4 +113,9 @@ scroll-snap-align: start;            /* snap its top to the viewport top */
     padding: 1rem 2rem;
     white-space: nowrap;
   }
+
+  .hero-content h1{
+    font-size: 2.5rem;
+    white-space: nowrap;
+    }
 }

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}SP-에스피개발: 회사정보{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'webapp/css/about.css' %}">
+<link rel="stylesheet" href="{% static 'webapp/css/about_cascade.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="section hero">
+    <div class="hero-content">
+      <h1>에스피개발 주식회사</h1>
+      <p class="subtitle">회사소개</p>
+    </div>
+  </section>
+<div class="about-container">
+
+<section class="company-intro">
+  <h1>타이틀</h1>
+  <div class="intro-wrapper">
+    <img 
+      src="{% static 'webapp/images/company.avif' %}" 
+      alt="회사 전경" 
+      class="intro-image"
+    >
+    <p>
+      에스피개발 주식회사는 2001년 설립 이래 혁신적이고 지속 가능한 도시정비사업을
+      선도해 왔습니다. 당사는 철저한 시장조사와 전문기술력을 바탕으로 재개발·재건축,
+      가로주택정비사업 등 다양한 분야에서 최적의 솔루션을 제공합니다.
+      고객과의 신뢰를 최우선으로 생각하며, 사회적 책임과 환경을 고려한 개발로
+      늘 한 단계 앞선 가치를 만들어갑니다.
+    </p>
+  </div>
+</section>
+
+<!-- ▶ 회사 개요 -->
+<section class="company-overview">
+  <h2>회사 개요</h2>
+  <dl class="overview-list">
+    <dt>회사명</dt>            <dd>에스피개발 주식회사</dd>
+    <dt>대표이사</dt>          <dd>홍길동</dd>
+    <dt>설립일</dt>            <dd>2001년 5월 1일</dd>
+    <dt>사업자등록번호</dt>    <dd>123-45-67890</dd>
+    <dt>주소</dt>              <dd>서울특별시 중구 세종대로 110</dd>
+    <dt>Tel</dt>               <dd>02-3142-9500</dd>
+    <dt>Fax</dt>               <dd>02-3142-9503</dd>
+    <dt>E-mail</dt>            <dd>info@spdev.co.kr</dd>
+  </dl>
+</section>
+
+<!-- ▶ 주요 사업 안내 -->
+<section class="business-overview">
+  <h2>주요 사업 분야</h2>
+  <p>
+    에스피개발은 재개발·재건축, 가로주택정비사업, 역세권 복합개발 등
+    다양한 도시정비사업을 수행해 왔습니다. 각 사업은 철저한 타당성 검토와
+    체계적인 프로젝트 관리로 높은 만족도를 보장합니다.
+  </p>
+  <a href="{% url 'webapp_business' %}" class="btn btn-primary">
+    사업 내역 보기
+  </a>
+</section>
+</div>
+  
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}
