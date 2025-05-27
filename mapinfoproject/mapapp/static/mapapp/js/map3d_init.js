@@ -123,10 +123,59 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
         feature3d.show();
         selectedFeatures[pnu] = feature3d;
 
-        fetch(`/mapapp/api/pnu_info/?pnu=${pnu}&year=2024`)
-          .then(r => r.json())
-          .then(data => addInfo(pnu, data.characteristics, data.addr, data.jibun))
-          .catch(console.error);
+        //fetch(`/mapapp/api/pnu_info/?pnu=${pnu}&year=2024`)
+          //.then(r => r.json())
+          //.then(data => addInfo(pnu, data.characteristics, data.addr, data.jibun))
+          //.catch(console.error);
+
+        const charUrl = 
+        `https://api.vworld.kr/ned/data/getLandCharacteristics?` +
+        `key=${VWORLD_KEY}` +
+        `&domain=${encodeURIComponent(location.origin)}` +
+        `&pnu=${pnu}` +
+        `&stdrYear=2024` +
+        `&format=json`;
+        const charProxy = `https://map.vworld.kr/proxy.do?url=${encodeURIComponent(charUrl)}`;
+        const priceUrl =
+        `https://api.vworld.kr/ned/data/getIndvdLandPriceAttr?` +
+        `key=${VWORLD_KEY}` +
+        `&domain=${encodeURIComponent(location.origin)}` +
+        `&pnu=${pnu}` +
+        `&stdrYear=2024` +
+        `&format=json`;
+      const priceProxy = `https://map.vworld.kr/proxy.do?url=${encodeURIComponent(priceUrl)}`;
+
+       fetch(charProxy)
+        .then(r => r.json())
+        .then(charData => {
+          const rec = (charData.landCharacteristicss.field || [])[0] || {};
+          return fetch(priceProxy)
+            .then(r => r.json())
+            .then(priceData => {
+              const pr = (priceData.indvdLandPrices.field || [])[0] || {};
+              // now call addInfo with both datasets:
+              addInfo(pnu,
+                {
+                  지형고도코드명:    rec.tpgrphHgCodeNm,
+                  기준연도:        rec.stdrYear,
+                  지목명:          rec.lndcgrCodeNm,
+                  도로접도구분명:   rec.roadSideCodeNm,
+                  공시지가:        pr.pblntfPclnd,
+                  용도지역1명:     rec.prposArea1Nm,
+                  용도지역2명:     rec.prposArea2Nm,
+                  토지이용상황명:   rec.ladUseSittnNm,
+                  최종갱신일자:     rec.lastUpdtDt,
+                  등록구분명:       rec.regstrSeCodeNm,
+                  지번면적:        rec.lndpclAr,
+                  지형형상코드명:   rec.tpgrphFrmCodeNm,
+                  지적구역명:       rec.ldCodeNm
+                },
+                rec.ldCodeNm + ' ' + rec.mnnmSlno + (rec.bubun || ''), // or however you compose the jibun
+                pr.jibun
+              );
+            });
+        })
+        .catch(console.error);
       });
     })
     .catch(console.error);
