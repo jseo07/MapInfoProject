@@ -1,27 +1,30 @@
 // map3d_init.js
 
+// Assumes you have included SheetJS for exportTableToExcel, e.g.
+// <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 let vworldMap;
 let selectedFeatures = {};
 let infoMap          = {};
 
 window.addEventListener('load', function() {
-  // ── 1) Your original map options ────────────────────────────────
+  // ── 1) Map options ──────────────────────────────────────────────
   const options = {
     mapId:       'map3d',
     apiKey:      VWORLD_KEY,
     initPosition: new vw.CameraPosition(
-      new vw.CoordZ(127.097, 36.8016, 5000),  // back to 5000 m
+      new vw.CoordZ(127.097, 36.8016, 5000),
       new vw.Direction(0, -90, 0)
     ),
     logo:        true,
     navigation:  true
   };
 
-  // ── 2) Instantiate & configure map ─────────────────────────────
+  // ── 2) Instantiate map ───────────────────────────────────────────
   vworldMap = new vw.Map();
   vworldMap.setOption(options);
 
-  // ── 3) Inject your WMS overlay once Cesium is ready ─────────────
+  // ── 3) Add your WMS overlay once Cesium is ready ─────────────────
   vw.ws3dInitCallBack = function() {
     const wmsLayer  = new vw.Layers();
     const wmsSource = new vw.source.TileWMS();
@@ -37,15 +40,13 @@ window.addEventListener('load', function() {
     wmsLayer.add(wmsTile);
   };
 
-  // ── 4) Start the map & hook your click handler ─────────────────
+  // ── 4) Start map & hook click ────────────────────────────────────
   vworldMap.start();
   vworldMap.onClick.addEventListener(wfsEvent);
 
   // ── 5) “모두 해제” button ────────────────────────────────────────
   document.getElementById('unselectall').addEventListener('click', () => {
-    for (const pnu in selectedFeatures) {
-      selectedFeatures[pnu].hide();
-    }
+    Object.values(selectedFeatures).forEach(f => f.hide());
     selectedFeatures = {};
 
     const tbody = document.querySelector('#info-table tbody');
@@ -56,7 +57,7 @@ window.addEventListener('load', function() {
   // ── 6) “CSV 내보내기” button ───────────────────────────────────
   document.getElementById('export-csv').addEventListener('click', () => {
     const ts = new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
-    exportTableToExcel(`parcels-${ts}.csv`);
+    exportTableToExcel(`parcels-${ts}.xlsx`);
   });
 });
 
@@ -66,14 +67,33 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
   const [dx, dy] = getBuffer();
   const bbox = [lon - dx, lat - dy, lon + dx, lat + dy].join(',');
 
-  fetch(`/mapapp/api/landuse_wfs/?bbox=${encodeURIComponent(bbox)}`)
-    .then(r => { if (!r.ok) throw new Error(`WFS proxy error: ${r.status}`); return r.json(); })
+  // Build raw WFS URL
+  const rawWfsUrl = [
+    "https://api.vworld.kr/req/wfs?",
+    `key=${VWORLD_KEY}`,
+    "&service=WFS",
+    "&version=2.0.0",
+    "&request=GetFeature",
+    "&typeNames=lp_pa_cbnd_bubun",
+    "&output=application/json",
+    "&srsName=EPSG:4326",
+    `&bbox=${bbox}`
+  ].join("");
+
+  // Wrap in vWorld proxy
+  const proxyUrl = `https://map.vworld.kr/proxy.do?url=${encodeURIComponent(rawWfsUrl)}`;
+
+  fetch(proxyUrl)
+    .then(r => {
+      if (!r.ok) throw new Error(`WFS proxy error: ${r.status}`);
+      return r.json();
+    })
     .then(geojson => {
       const features = geojson.features || [];
       if (!features.length) return;
-      const primaryPnu = features[0].properties.pnu;
 
-      // toggle-off
+      // Primary parcel toggle
+      const primaryPnu = features[0].properties.pnu;
       if (selectedFeatures[primaryPnu]) {
         selectedFeatures[primaryPnu].hide();
         delete selectedFeatures[primaryPnu];
@@ -81,7 +101,7 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
         return;
       }
 
-      // highlight all returned parcels
+      // Highlight all returned parcels
       features.forEach(feat => {
         const pnu = feat.properties.pnu;
         if (selectedFeatures[pnu]) return;
@@ -90,18 +110,14 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
         parser.setId(`sel-${pnu}`);
         const feature3d = parser.read(
           vw.GMLParserType.GEOJSON,
-          `/mapapp/api/landuse_wfs/?bbox=${encodeURIComponent(bbox)}`,
+          proxyUrl,
           'EPSG:4326'
         );
         feature3d.setOption({
-          // sit exactly on the land surface:
-        isTerrain:     false,      // still not draped to terrain mesh
-        clampToGround: true,       // forces coords down to ground
-        // height:      0,         // no extra lift
-    
-        // your fill only—no outline
-        material:      new vw.Color(0,255,0,255).ws3dColor.withAlpha(0.5),
-        outline:       false
+          isTerrain:     false,
+          clampToGround: true,
+          material:      new vw.Color(0,255,0,255).ws3dColor.withAlpha(0.5),
+          outline:       false
         });
         feature3d.makeCoords();
         feature3d.show();
@@ -152,7 +168,7 @@ function getBuffer() {
   const z   = pos.z;
   const baseDx = 1/(111000/z * 1.48 * 50);
   const baseDy = 1/(111000/z * 1.85 * 50);
-  const scale  = 0.001;  // your original scale
+  const scale  = 0.001;
   return [ baseDx * scale, baseDy * scale ];
 }
 
@@ -176,14 +192,8 @@ function exportTableToCSV(filename) {
 }
 
 function exportTableToExcel(filename) {
-  // Convert the table #info-table into a SheetJS workbook:
-  const table = document.getElementById('info-table');
+  const table    = document.getElementById('info-table');
   const workbook = XLSX.utils.table_to_book(table, { sheet: "Parcels" });
-
-  // Ensure filename ends with .xlsx
-  const name = filename.endsWith('.xlsx') ? filename : filename + '.xlsx';
-
-  // Write and trigger download
+  const name     = filename.endsWith('.xlsx') ? filename : filename + '.xlsx';
   XLSX.writeFile(workbook, name);
 }
-
