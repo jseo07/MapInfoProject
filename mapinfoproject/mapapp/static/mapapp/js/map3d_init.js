@@ -171,7 +171,7 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
                   지적구역명:       rec.ldCodeNm
                 },
                 rec.ldCodeNm + ' ' + rec.mnnmSlno + (rec.bubun || ''), // or however you compose the jibun
-                pr.jibun
+                pr.mnnmSlno
               );
             });
         })
