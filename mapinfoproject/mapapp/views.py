@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 @require_GET
 def landuse_wfs(request):
     bbox   = request.GET.get('bbox','')
-    domain = request.build_absolute_uri('/')[:-1]
+    domain = request.get_host()
 
     wfs_url = (
         "https://api.vworld.kr/req/wfs?"
@@ -82,7 +82,7 @@ return JsonResponse(resp.json(), safe=False)
 def pnu_info(request):
     pnu    = request.GET.get('pnu')
     year   = request.GET.get('year', '2024')
-    domain = request.build_absolute_uri('/')[:-1]
+    domain = request.get_host()
     key    = settings.VWORLD_API_KEY
 
     def call_api(endpoint, extra_params):
