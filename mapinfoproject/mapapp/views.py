@@ -40,7 +40,7 @@ def landuse_wfs(request):
         # return the error as XML so you can inspect it
         return HttpResponse(
             f"<Error>WFS request exception: {e}</Error>",
-            content_type="application/xml",
+            content_type="text/plain",
             status=502
         )
 
@@ -49,7 +49,7 @@ def landuse_wfs(request):
     if "application/json" not in ct:
         return HttpResponse(
             resp.text,
-            content_type="application/xml",
+            content_type="text/plain",
             status=502
         )
 
@@ -59,7 +59,7 @@ def landuse_wfs(request):
         logger.exception("Failed to parse vWorld WFS JSON")
         return HttpResponse(
             resp.text,
-            content_type="application/xml",
+            content_type="text/plain",
             status=502
         )
 
