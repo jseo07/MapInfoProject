@@ -71,13 +71,13 @@ function wfsEvent(windowPosition, ecefPosition, cartographic) {
   const rawWfsUrl = [
     "https://api.vworld.kr/req/wfs?",
     `key=${VWORLD_KEY}`,
-    "&service=WFS",
-    "&version=2.0.0",
-    "&request=GetFeature",
-    "&typeNames=lp_pa_cbnd_bubun",
-    "&output=application/json",
-    "&srsName=EPSG:4326",
-    `&bbox=${bbox}`
+    "&SERVICE=WFS",
+    "&VERSION=2.0.0",
+    "&REQUEST=GetFeature",
+    "&TYPENAME=lp_pa_cbnd_bubun",
+    "&OUTPUT=application/json",
+    "&SRSNAME=EPSG:4326",
+    `&BBOX=${bbox}`
   ].join("");
 
   // Wrap in vWorld proxy
