@@ -35,18 +35,34 @@ def landuse_wfs(request):
         '&SRSNAME=EPSG:4326'
         f'&BBOX={bbox}'
     )
-
-    # Fetch from vWorld
     resp = requests.get(wfs_url)
+    # if vWorld returns non-200, just forward the body
+    if not resp.ok:
+        return HttpResponse(resp.text, content_type='application/xml', status=resp.status_code)
 
-    # If vWorld didn't return JSON (e.g. error XML), forward it as XML
-    content_type = resp.headers.get('Content-Type', '')
-    if 'application/json' not in content_type:
+    # now try to parse JSON, but catch failures
+    try:
+        payload = resp.json()
+    except ValueError:
+        # bad JSON → return XML so you can inspect the error
         return HttpResponse(resp.text, content_type='application/xml', status=502)
 
-    # Otherwise return the GeoJSON payload
-    return JsonResponse(resp.json(), safe=False)
+    return JsonResponse(payload, safe=False)
 
+
+""""
+# Fetch from vWorld
+resp = requests.get(wfs_url)
+
+# If vWorld didn't return JSON (e.g. error XML), forward it as XML
+content_type = resp.headers.get('Content-Type', '')
+if 'application/json' not in content_type:
+    return HttpResponse(resp.text, content_type='application/xml', status=502)
+
+# Otherwise return the GeoJSON payload
+return JsonResponse(resp.json(), safe=False)
+
+"""
 @require_GET
 def pnu_info(request):
     pnu    = request.GET.get('pnu')
