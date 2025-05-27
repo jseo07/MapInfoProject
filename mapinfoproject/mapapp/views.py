@@ -3,7 +3,7 @@ from django.conf              import settings
 from django.http              import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 import requests
-
+import logging
 
 # Create your views here.
 def index(request):
@@ -11,44 +11,59 @@ def index(request):
         'VWORLD_API_KEY' : settings.VWORLD_API_KEY,
     })
 
+logger = logging.getLogger(__name__)
+
 @require_GET
 def landuse_wfs(request):
-    """
-    Proxy endpoint for vWorld WFS: returns GeoJSON for polygons
-    intersecting the given bbox. Expects a GET param 'bbox' in the
-    form 'minLon,minLat,maxLon,maxLat'.
-    """
-    bbox   = request.GET.get('bbox', '')
-    # Build your app's origin (e.g. "http://127.0.0.1:8000")
+    bbox   = request.GET.get('bbox','')
     domain = request.build_absolute_uri('/')[:-1]
 
-    # Construct the vWorld WFS URL using only BBOX
     wfs_url = (
-        'https://api.vworld.kr/req/wfs?'
-        f'key={settings.VWORLD_API_KEY}'
-        f'&domain={domain}'
-        '&SERVICE=WFS'
-        '&VERSION=2.0.0'
-        '&REQUEST=GetFeature'
-        '&TYPENAME=lp_pa_cbnd_bubun'
-        '&OUTPUT=application/json'
-        '&SRSNAME=EPSG:4326'
-        f'&BBOX={bbox}'
+        "https://api.vworld.kr/req/wfs?"
+        f"key={settings.VWORLD_API_KEY}"
+        f"&domain={domain}"
+        "&SERVICE=WFS"
+        "&VERSION=2.0.0"
+        "&REQUEST=GetFeature"
+        "&TYPENAME=lp_pa_cbnd_bubun"
+        "&OUTPUT=application/json"
+        "&SRSNAME=EPSG:4326"
+        f"&BBOX={bbox}"
     )
-    resp = requests.get(wfs_url)
-    # if vWorld returns non-200, just forward the body
-    if not resp.ok:
-        return HttpResponse(resp.text, content_type='application/xml', status=resp.status_code)
 
-    # now try to parse JSON, but catch failures
     try:
-        payload = resp.json()
-    except ValueError:
-        # bad JSON → return XML so you can inspect the error
-        return HttpResponse(resp.text, content_type='application/xml', status=502)
+        # use a short timeout so you don’t hang
+        resp = requests.get(wfs_url, timeout=5)
+        resp.raise_for_status()
+    except requests.RequestException as e:
+        logger.exception("vWorld WFS request failed")
+        # return the error as XML so you can inspect it
+        return HttpResponse(
+            f"<Error>WFS request exception: {e}</Error>",
+            content_type="application/xml",
+            status=502
+        )
 
-    return JsonResponse(payload, safe=False)
+    ct = resp.headers.get("Content-Type","")
+    # if vWorld didn’t give us JSON (e.g. HTML error page)…
+    if "application/json" not in ct:
+        return HttpResponse(
+            resp.text,
+            content_type="application/xml",
+            status=502
+        )
 
+    try:
+        data = resp.json()
+    except ValueError as e:
+        logger.exception("Failed to parse vWorld WFS JSON")
+        return HttpResponse(
+            resp.text,
+            content_type="application/xml",
+            status=502
+        )
+
+    return JsonResponse(data, safe=False)
 
 """"
 # Fetch from vWorld
