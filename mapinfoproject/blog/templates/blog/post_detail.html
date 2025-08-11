@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ post.title }} | 게시판{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'webapp/css/about.css' %}">
+
+<link rel="stylesheet" href="{% static 'blog/css/blog.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="sections-container">
+  <!-- ▶ Hero Section -->
+  <section class="section hero">
+    <div class="hero-content">
+      <h1>에스피개발 주식회사</h1>
+      <p class="subtitle" style="font-style: italic;">Special Partner.</p>
+    </div>
+  </section>
+</div>
+
+<section class="section-content">
+  <div class="container blog-article">
+    <header class="blog-article__header">
+      <h1 class="blog-article__title">{{ post.title }}</h1>
+      <p class="blog-article__meta"> {{ post.created_at|date:"Y-m-d" }}</p>
+
+      {% if request.user.is_staff %}
+      <div class="admin-quick">
+        <a class="btn btn-secondary" href="{% url 'blog:edit' post.slug %}">편집</a>
+        <a class="btn btn-danger" href="{% url 'blog:delete' post.slug %}">삭제</a>
+      </div>
+      {% endif %}
+      <a class="btn btn-secondary" href="{% url 'blog:list' %}">이전</a>
+    </header>
+
+    {% if post.cover_image %}
+      <img class="blog-article__cover" src="{{ post.cover_image.url }}" alt="">
+    {% endif %}
+
+    <div class="blog-article__content">
+      {{ post.content|linebreaks }} {# swap to markdown/ckeditor later if desired #}
+    </div>
+  </div>
+</section>
+{% endblock %}

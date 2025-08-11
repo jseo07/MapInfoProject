@@ -17,7 +17,7 @@
   <section class="section hero">
     <div class="hero-content">
       <h1>에스피개발 주식회사</h1>
-      <p class="subtitle">서브 타이틀</p>
+      <p class="subtitle" style="font-style: italic;">Special Partner.</p>
     </div>
     <div class="hero-nav">
       <button class="hero-nav__btn active" data-target="section1">회사소개</button>
@@ -39,18 +39,31 @@
       </p>
       {% url 'webapp_under_construction' as under_construction_url %}
       <div class="business-grid">
-        {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/project1.jpg' title='뭐시기 사업 1' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
+         <!-- ▶ Business Cards 
+          
+         {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/project1.jpg' title='뭐시기 사업 1' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
         
         {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/background.jpg' title='뭐시기 사업 2' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
         
         {% include 'webapp/partials/businesses_partial.html' with image='webapp/images/about-bg.jpg' title='뭐시기 사업 3' description='이 사업은 이렇게 해서 저렇게 해서 그렇게 하고..' link=under_construction_url %}
+         
+         -->
+        <div class="icon-item">
+          <img src="{% static 'webapp/images/development.png' %}" alt="Development Icon">
+          <div class="icon-subtitle">도시개발</div>
+        </div>
+        <div class="icon-item">
+          <img src="{% static 'webapp/images/industrial.png' %}" alt="Industrial Icon">
+          <div class="icon-subtitle">산업단지개발</div>
+        </div>
+        <div class="icon-item">
+          <img src="{% static 'webapp/images/implement.png' %}" alt="Implement Icon">
+          <div class="icon-subtitle">사업시행(PM)</div>
+        </div>
+  
       </div>
 
-      <div class="button-group" style="text-align:center; margin-top:2rem;">
-        <a href="{% url 'webapp_business' %}" class="contact-cta-full__btn">
-          주요업무사항 더보기
-        </a>
-    </div>
+      
 
     </div>
   </div>

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}게시판{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'webapp/css/about.css' %}">
+<link rel="stylesheet" href="{% static 'blog/css/blog.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="sections-container">
+  <!-- ▶ Hero Section -->
+  <section class="section hero">
+    <div class="hero-content">
+      <h1>에스피개발 주식회사</h1>
+      <p class="subtitle" style="font-weight: 400; font-size: 1.5rem">게시판</p>
+    </div>
+  </section>
+</div>
+
+<section class="section-content">
+  <div class="container">
+    <div class="blog-header">
+      {% if request.user.is_staff %}
+        <a class="btn btn-primary" href="{% url 'blog:create' %}">새 글</a>
+      {% endif %}
+    </div>
+
+    <div class="blog-grid">
+      {% for p in posts %}
+        <article class="blog-card">
+          <a class="blog-card__link" href="{% url 'blog:detail' p.slug %}">
+            {% if p.cover_image %}
+              <img class="blog-card__image" src="{{ p.cover_image.url }}" alt="{{ p.title }}">
+            {% endif %}
+            <h3 class="blog-card__title">{{ p.title }}</h3>
+            <p class="blog-card__meta">{{ p.created_at|date:"Y-m-d" }}</p>
+          </a>
+        </article>
+      {% empty %}
+        <p>게시글이 없습니다.</p>
+      {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+      <nav class="pagination">
+        {% if page_obj.has_previous %}
+          <a class="page-btn" href="?page={{ page_obj.previous_page_number }}">이전</a>
+        {% endif %}
+        <span class="page-indicator">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+          <a class="page-btn" href="?page={{ page_obj.next_page_number }}">다음</a>
+        {% endif %}
+      </nav>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

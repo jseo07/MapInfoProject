@@ -5,8 +5,8 @@
       <a href="/">
         <img
           id="logo-img"
-          src="{% static 'images/logo-bright.png' %}" 
-          data-src-top="{% static 'images/logo-bright.png' %}"
+          src="{% static 'images/logo.png' %}" 
+          data-src-top="{% static 'images/logo.png' %}"
           data-src-scrolled="{% static 'images/logo.png' %}"
           alt="SP Development Logo"
           class="logo-image"
@@ -17,9 +17,26 @@
     <nav id="navbar-menu" class="navbar-menu">
       <ul>
         <li><a href="{% url 'webapp_about' %}">회사소개</a></li>
-        <li><a href="{% url 'webapp_business' %}">주요업무사항</a></li>
+        <li><a href="{% url 'blog:list' %}">게시판</a></li>
         <li><a href="{% url 'webapp_contact' %}">문의</a></li>
-        <li><a href="{% url 'mapapp:map_index' %}">지도</a></li>
+        {% if user.is_authenticated %}
+          <li>
+            <a href="#" class="navbar-menu__link" data-logout>로그아웃</a>
+            <form action="{% url 'logout' %}" method="post" data-logout-form hidden>
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.get_full_path|default:'/' }}">
+            </form>
+          </li>
+
+          <li><a href="{% url 'mapapp:map_index' %}">지도</a></li>
+        {% else %}
+          <li>
+            <a
+              href="{% url 'login' %}?next={{ request.get_full_path|urlencode }}">
+              관리자 로그인
+            </a>
+          </li>
+        {% endif %}
       </ul>
     </nav>
 

@@ -22,7 +22,6 @@
   /* ensure nothing is clipping the shadow */
   overflow: visible;
   z-index: 1000;
-
 }
 
 .navbar-container {
@@ -34,6 +33,7 @@
 .navbar .logo a,
 .navbar .navbar-menu a {
   color: white;
+  font-weight: 500;
 }
 
 /* On scroll: black text */

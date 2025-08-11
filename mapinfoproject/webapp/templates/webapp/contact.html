@@ -4,10 +4,59 @@
 {% block title %}SP-에스피개발: 문의{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'webapp/css/about.css' %}">
+<link rel="stylesheet" href="{% static 'webapp/css/contact.css' %}">
+
 {% endblock %}
 
 {% block content %}
-Under Development
+<section class="section hero">
+    <div class="hero-content">
+      <h1>에스피개발 주식회사</h1>
+      <p class="subtitle">문의</p>
+    </div>
+  </section>
+
+  <div class="contact-page">
+  <div class="contact-page__form">
+    <div class="contact">
+      {% load static %}
+        <form class="contact__form" action="{% url 'webapp_contact_page' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <div class="contact__field">
+            <label class="contact__label" for="name">이름</label>
+            <input class="contact__input" type="text" id="name" name="name" required>
+          </div>
+
+          <div class="contact__field">
+            <label class="contact__label" for="email">이메일</label>
+            <input class="contact__input" type="email" id="email" name="email">
+          </div>
+
+          <div class="contact__field">
+            <label class="contact__label" for="phone">휴대전화</label>
+            <input class="contact__input" type="text" id="phone" name="phone" required>
+          </div>
+
+          <div class="contact__field">
+            <label class="contact__label" for="message">문의사항</label>
+            <textarea class="contact__input contact__textarea" id="message" name="message" required></textarea>
+          </div>
+
+          {% if messages %}
+            <ul class="contact__success_list">
+              {% for msg in messages %}
+                <li class="contact__success_message">{{ msg }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          <button class="contact__btn" type="submit">제출</button>
+        </form>
+</div>
+
+  </div>
+
 {% endblock %}
 
 {% block extra_js %}

@@ -27,5 +27,15 @@
 
   <script src="{% static 'js/scripts.js' %}"></script>
   {% block extra_js %}{% endblock %}
+  <script defer>
+    document.addEventListener('click', function(e){
+      const link = e.target.closest('[data-logout]');
+      if (!link) return;
+      e.preventDefault();
+      const form = link.parentElement.querySelector('[data-logout-form]');
+      if (form) form.submit();
+    });
+</script>
+
 </body>
 </html>

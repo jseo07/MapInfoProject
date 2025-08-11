@@ -132,6 +132,17 @@ scroll-snap-align: start;            /* snap its top to the viewport top */
 }
 
 
+.signature-section {
+  width: 100%;
+  text-align: right;
+  margin-top: 1rem; /* optional spacing */
+}
+.signature-section p {
+  font-size: 1.2rem;
+  font-weight: 500;
+  padding-top: 2rem;
+}
+
 /* Responsive: stack image above text on small */
 @media (max-width: 768px) {
   .intro-image {

@@ -7,5 +7,6 @@ urlpatterns = [
     path('contact', views.contact, name='webapp_contact'),
     path('about', views.about, name='webapp_about'),
     path('business', views.business, name='webapp_business'),
+    path('contact_page', views.contact_page, name='webapp_contact_page'),
     # add more patterns here…
 ]

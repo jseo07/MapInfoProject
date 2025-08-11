@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}게시글 {{ view.object|yesno:"수정,작성" }}{% endblock %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'webapp/css/about.css' %}">
+<link rel="stylesheet" href="{% static 'blog/css/blog.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+<div class="sections-container">
+  <!-- ▶ Hero Section -->
+  <section class="section hero">
+    <div class="hero-content">
+      <h1>에스피개발 주식회사</h1>
+      <p class="subtitle" style="font-style: italic;">Special Partner.</p>
+    </div>
+  </section>
+</div>
+
+<section class="section-content">
+  <div class="container form-wrap">
+    <h1 class="section-title">게시글 {{ view.object|yesno:"수정,작성" }}</h1>
+
+    <form method="post" enctype="multipart/form-data" class="form">
+      {% csrf_token %}
+      <div class="form-row">
+        <label for="{{ form.title.id_for_label }}">제목</label>
+        {{ form.title }}
+        {% if form.title.errors %}<p class="form-error">{{ form.title.errors.0 }}</p>{% endif %}
+      </div>
+
+      <div class="form-row">
+        <label for="{{ form.content.id_for_label }}">내용</label>
+        {{ form.content }}
+        {% if form.content.errors %}<p class="form-error">{{ form.content.errors.0 }}</p>{% endif %}
+      </div>
+
+      <div class="form-row">
+        <label for="{{ form.cover_image.id_for_label }}">대표 이미지</label>
+        {{ form.cover_image }}
+        {% if form.cover_image.errors %}<p class="form-error">{{ form.cover_image.errors.0 }}</p>{% endif %}
+      </div>
+
+      <div class="form-row form-row-inline">
+        <label class="checkbox">
+          {{ form.published }} 공개
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">저장</button>
+        <a href="{% if view.object %}{{ view.object.get_absolute_url }}{% else %}{% url 'blog:list' %}{% endif %}" class="btn">취소</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

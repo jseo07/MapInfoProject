@@ -4,11 +4,38 @@ html {
   overflow-x: hidden;
 }
 
+html, body {
+  height: 100%;
+  overflow-y: auto;              /* page scroll only */
+  scroll-snap-type: y mandatory; /* snap on vertical scroll */
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--navbar-height); /* don’t hide under fixed nav */
+}
 
 
 /* All sections snap to the top & fill screen */
 .section {
   position: relative;
+}
+
+
+.sections-container {
+  height: auto;   /* remove any 100vh here */
+  overflow: visible;
+
+}
+
+.section,
+.section-content {
+  min-height: 100vh; /* each section fills screen */
+  scroll-snap-align: start; /* snap to top of section */
+  display: flex; /* center content optional */
+  flex-direction: column;
+  justify-content: center;
+}
+
+#section3{
+  min-height: 0;
 }
 
 /* === Hero Section === */
@@ -22,6 +49,8 @@ html {
   margin-top: calc(-1 * var(--navbar-height));
   /* Compensate so the section still fills screen */
   padding-top: var(--navbar-height);
+
+  min-height: 100svh; scroll-snap-align: start; scroll-snap-stop: always;
 
 }
 
@@ -72,20 +101,11 @@ html {
 .section-content {
   padding: 2rem;
 }
-.section-content.active {
-  display: block;
-}
 
-.section {
-}
 
 #section1, #section2{
   padding: 5rem 0;
 }
-#section2{
-    background-color: rgb(235, 235, 235);
-}
-
 /* === Section 1 & 2 styling (example) === */
 #section1, #section2 {
   display: flex;
@@ -109,4 +129,83 @@ html {
     font-size: 2.5rem;
     white-space: nowrap;
     }
+
+    .business-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.business-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  max-width: 1100px;
+  margin: 2rem auto 0;
+}
+
+.icon-item {
+  background: #fff;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 12px 30px rgba(0,0,0,.06);
+  transition: transform .2s ease, box-shadow .2s ease;
+  text-align: center;
+}
+
+.icon-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(0,0,0,.08);
+}
+
+.icon-item img { width: 88px; height: auto; margin: 0 auto .75rem; }
+.icon-subtitle { font-weight: 500; font-size: 1.05rem; color:#111; }
+
+.section-subtitle{
+  padding-bottom: 1rem;
+  font-style:italic;
+}
+
+.section,
+.section-content,
+footer {
+  scroll-snap-align: start;      /* snap the top of each panel */
+  scroll-snap-stop: always;      /* optional: stronger snap feel */
+  display: flex;                 /* optional centering */
+  flex-direction: column;
+  justify-content: center;
+}
+
+.section-content {
+  min-height: 70svh;             /* feels full, not empty */
+  padding-block: clamp(2.5rem, 6vw, 6rem);
+  scroll-snap-align: start;
+}
+
+#section2 {
+  /* Tweakables */
+  --fade: 96px;              /* height of the top/bottom fade */
+  --overlay: 0.9;           /* 0–1: how much to wash out the image */
+  --top-bg: #fff;            /* bg color of the section ABOVE */
+  --bottom-bg: #fff;         /* bg color of the section BELOW */
+
+  /* 4 layers: top fade, bottom fade, white overlay, image */
+  background:
+    /* Top fade: solid -> transparent */
+    linear-gradient(to bottom,
+      var(--top-bg) 0,
+      rgba(255,255,255,0) var(--fade)
+    ),
+    /* Bottom fade: solid -> transparent */
+    linear-gradient(to top,
+      var(--bottom-bg) 0,
+      rgba(255,255,255,0) var(--fade)
+    ),
+    /* Global opacity wash (use rgba(0,0,0,...) for darkening) */
+    linear-gradient(
+      rgba(255,255,255,var(--overlay)),
+      rgba(255,255,255,var(--overlay))
+    ),
+    /* The image itself */
+    url('../images/white-back.jpg') center/cover no-repeat;
 }
