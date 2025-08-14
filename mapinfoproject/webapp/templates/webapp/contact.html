@@ -20,6 +20,12 @@
   <div class="contact-page">
   <div class="contact-page__form">
     <div class="contact">
+
+      <div class="contact__header">
+        <p class="contact__desc">
+          궁금하신 점이 있으신가요? 아래 양식으로 문의를 남겨주시면 신속하게 답변드리겠습니다.
+        </p>
+    </div>
       {% load static %}
         <form class="contact__form" action="{% url 'webapp_contact_page' %}" method="post">
           {% csrf_token %}
