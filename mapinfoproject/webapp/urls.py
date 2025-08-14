@@ -1,7 +1,10 @@
 from django.urls import path
+from django.conf import settings
 from . import views
 from django.http import HttpResponse, JsonResponse
 from django.core.files.storage import default_storage
+import os
+
 
 def storage_env_debug(_):
     return JsonResponse({
