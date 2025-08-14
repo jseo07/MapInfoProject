@@ -2,13 +2,22 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from django.core.files.storage import get_storage_class
+
+# Resolve to the active default storage (Cloudinary in prod, filesystem locally)
+StorageCls = get_storage_class()  # uses settings.DEFAULT_FILE_STORAGE under the hood
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=220, unique=True, blank=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     content = models.TextField()
-    cover_image = models.ImageField(upload_to='blog/', blank=True, null=True)
+    cover_image = models.ImageField(
+        upload_to='blog/',
+        storage=StorageCls(),   # <-- explicit storage here
+        blank=True,
+        null=True,
+    )
     published = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
