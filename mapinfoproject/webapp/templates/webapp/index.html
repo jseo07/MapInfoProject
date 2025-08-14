@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="{% static 'webapp/css/businesses_partial.css' %}">
   <link rel="stylesheet" href="{% static 'webapp/css/contact_cta.css' %}">
   <link rel="stylesheet" href="{% static 'webapp/css/index_cascade.css' %}">
+  <link rel="stylesheet" href="{% static 'webapp/css/cta.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -16,7 +17,7 @@
   <!-- ▶ Hero Section -->
   <section class="section hero">
     <div class="hero-content">
-      <h1>에스피개발 주식회사</h1>
+      <h1>에스피개발 주식회사<br></h1>
       <p class="subtitle" style="font-style: italic;">Special Partner.</p>
     </div>
     <div class="hero-nav">
@@ -67,8 +68,18 @@
 
     </div>
   </div>
+<section class="board-cta" id="board-cta">
+  <div class="board-cta__inner container">
+    <div class="board-cta__text">
+      <h2>게시판</h2>
+      <p>뉴스 · 공지 · 프로젝트 스토리를 확인해 보세요.</p>
+    </div>
 
-  <div id="section3" class="section-content">
+    <a href="{% url 'blog:list' %}" class="board-cta__btn" aria-label="게시판으로 이동">
+      게시판 바로가기
+    </a>
+  </div>
+</section>
     <div class="contact-cta-full">
       <p class="contact-cta-full__text">
         궁금하신 사항이 있으시면 아래 버튼을 클릭해주세요!
@@ -78,7 +89,6 @@
       </a>
     </div>
 
-  </div>
 
 </div>
 {% endblock %}

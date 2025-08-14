@@ -1,92 +1,122 @@
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  text-align: center;
-  color: #222;
-  margin-bottom: 0.5rem;
+/* ===== Business Cards – Clean, Square, Professional ===== */
+
+:root{
+  --card-bg: #fff;
+  --text-strong: #0f172a;
+  --text-weak: #64748b;
+  --border: #e5e7eb;
+  --border-hover: #cfd7e3;
+  --primary: var(--primary-color, #2563eb);
 }
 
-.section-subtitle {
-  font-size: 1.125rem;
-  font-weight: 400;
+/* Headings */
+.section-title{
+  font-size: clamp(1.8rem, 2.6vw, 2.2rem);
+  font-weight: 800;
   text-align: center;
-  color: #666;
-  margin-bottom: 3rem;
-  line-height: 1.4;
+  color: var(--text-strong);
+  margin: 0 0 .25rem;
+  letter-spacing: .2px;
+}
+.section-subtitle{
+  font-size: clamp(1rem, 1.6vw, 1.125rem);
+  text-align: center;
+  color: var(--text-weak);
+  margin: 0 0 2rem;
 }
 
-/* Grid container */
-
-.business-grid {
+/* Grid */
+.business-grid{
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(1rem, 2.5vw, 1.5rem);
 }
 
-/* Card */
-.business-card {
+/* Card (square corners, subtle border, no soft UI) */
+.business-card{
   position: relative;
-  background: #fff;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 0;                 /* << no rounding */
+  box-shadow: none;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .12s ease;
+}
+.business-card:hover{
+  border-color: var(--border-hover);
+  box-shadow: 0 10px 28px rgba(15,23,42,.08);
+  transform: translateY(-2px);
 }
 
-/* Image & overlay label */
-.card-image {
+/* Image area with consistent ratio */
+.card-image{
   position: relative;
+  background: #f8fafc;
 }
-.card-image img {
-  width: 100%;
+.card-image img{
   display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;             /* consistent crop */
+  object-fit: cover;
+  transition: transform .25s ease;
+}
+.business-card:hover .card-image img{
+  transform: scale(1.02);
 }
 
-/* Body & text */
-.card-body {
-  background: #f4f4f4;
-  padding: 1.5rem;
-  padding-bottom: 4rem;       /* add extra space at the bottom for the + button */
-
+/* Body */
+.card-body{
+  padding: 1rem 1rem 3.25rem;       /* bottom space for action button */
+  background: #fff;                 /* no gray panel look */
 }
-.card-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.75rem;
+.card-title{
+  margin: 0 0 .5rem;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  color: var(--text-strong);
 }
-.card-desc {
-  font-size: 0.95rem;
-  color: #555;
+.card-desc{
+  margin: 0;
+  color: var(--text-weak);
+  font-size: .95rem;
   line-height: 1.6;
 }
 
-/* Floating “+” button */
-.card-action {
+/* Bottom-right action (square button) */
+.card-action{
   position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  width: 3rem;
-  height: 3rem;
-  background: var(--primary-color);
-  color: #fff;
-  border-radius: 50%;
+  bottom: 0;
+  right: 0;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
   text-align: center;
-  line-height: 3rem;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   text-decoration: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: background 0.3s;
+
+  background: transparent;
+  color: var(--primary);
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  border-radius: 0;                 /* << square button */
+  box-shadow: none;
+
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
 }
-.card-action:hover {
-  background: var(--accent-color);
+.business-card:hover .card-action{
+  border-color: var(--border-hover);
+}
+.card-action:hover{
+  background: var(--primary);
+  color: #fff;
+}
+.card-action:focus-visible{
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
-/* Mobile fallback: single column */
-@media (max-width: 768px) {
-  .business-grid {
-    grid-template-columns: 1fr;
-    padding: 0 2rem;
-  }
-  .card-label {
-    transform: translate(-50%, 50%) scale(0.9);
-  }
-
+/* Mobile */
+@media (max-width: 768px){
+  .business-grid{ grid-template-columns: 1fr; }
 }
