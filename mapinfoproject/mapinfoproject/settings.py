@@ -152,14 +152,24 @@ GOOGLE_MAPS_API_KEY = os.environ.get('GOOGLE_MAPS_API_KEY', '')
 
 LOGIN_URL = 'login'
 
-if os.getenv('CLOUDINARY_URL'):
-    INSTALLED_APPS += ['cloudinary', 'cloudinary_storage']
-    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-else:
-    MEDIA_URL = '/media/'
-    MEDIA_ROOT = BASE_DIR / 'media'
-
 try:
-    from .local_settings import *
+    # Local development: use local_settings.py
+    from .local_settings import *  # noqa
+
+    # Force local file storage
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+    MEDIA_URL = globals().get('MEDIA_URL', '/media/')
+    MEDIA_ROOT = globals().get('MEDIA_ROOT', BASE_DIR / 'media')
+
+    # Ensure Cloudinary apps are NOT loaded locally
+    for app in ('cloudinary_storage', 'cloudinary'):
+        if app in INSTALLED_APPS:
+            INSTALLED_APPS.remove(app)
+
 except ImportError:
-    pass
+    # Production (no local_settings): use Cloudinary
+    for app in ('cloudinary', 'cloudinary_storage'):
+        if app not in INSTALLED_APPS:
+            INSTALLED_APPS.append(app)
+
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
