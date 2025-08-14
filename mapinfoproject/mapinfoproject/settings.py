@@ -46,8 +46,6 @@ INSTALLED_APPS = [
     'mapapp',
     'webapp',
     'blog',
-    'cloudinary',
-    'cloudinary_storage',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
