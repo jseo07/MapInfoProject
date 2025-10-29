@@ -23,4 +23,4 @@ The site features an **interactive map-driven data pipeline** that connects dire
 
 ---
 
-** The interactice map feature is only available to the admin of this website and opens upon log-in. A screenshot of the demo can be found at [my personal website](https://seojangwon.xyz/spdevelopment/) **
+** The interactice map feature is only available to the admin of this website and opens upon log-in. A screenshot of the demo can be found at [my personal website](https://seojangwon.xyz/sp) **
