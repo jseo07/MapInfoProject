@@ -27,7 +27,7 @@ window.addEventListener('load', function() {
     mapId:       'map3d',
     apiKey:      VWORLD_KEY,
     initPosition: new vw.CameraPosition(
-      new vw.CoordZ(127.097, 36.8016, 5000),
+      new vw.CoordZ(127.051523362, 36.730669214, 600),
       new vw.Direction(0, -90, 0)
     ),
     logo:        true,
