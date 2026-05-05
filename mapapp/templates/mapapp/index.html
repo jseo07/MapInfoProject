@@ -22,46 +22,52 @@
 
         <ol>
             <li>
-            <strong>지도에서 토지 선택:</strong>
-            지도 위의 토지를 클릭하면 해당 필지가 초록색으로 표시되고, 오른쪽 표에 토지 정보가 추가됩니다.
+            <strong>토지 선택</strong><br>
+            지도에서 클릭하거나 <strong>드래그 선택</strong>으로 여러 필지를 선택합니다.
             </li>
 
             <li>
-            <strong>주소 검색으로 토지 추가:</strong>
-            검색창에 도로명주소, 지번주소, 또는 도로명을 입력한 뒤 <strong>검색</strong> 버튼을 누르세요.
-            검색 결과 목록에서 원하는 주소를 클릭하면 해당 토지가 지도에 표시되고 표에 추가됩니다.
+            <strong>주소 검색</strong><br>
+            주소 또는 도로명을 입력 후 검색 → 결과를 클릭하면 토지가 추가됩니다.
             </li>
 
             <li>
-            <strong>표에서 토지 확인:</strong>
-            표의 행을 클릭하면 해당 토지 위치로 지도가 이동합니다.
+            <strong>그룹 설정</strong><br>
+            그룹을 선택한 뒤 토지를 선택하면 해당 그룹으로 저장됩니다.
             </li>
 
             <li>
-            <strong>토지 강조 표시:</strong>
-            표의 행을 클릭하면 행이 강조 표시되고, 지도 위의 해당 토지가 주황색으로 변경됩니다.
-            다시 클릭하면 기본 초록색으로 돌아갑니다.
+            <strong>토지 확인 및 강조</strong><br>
+            표의 행을 클릭하면 지도에서 위치로 이동하며 강조 표시됩니다.
             </li>
 
             <li>
-            <strong>개별 토지 해제:</strong>
-            각 행의 <strong>해제</strong> 버튼을 누르면 해당 행이 삭제되고, 지도 위의 표시도 제거됩니다.
+            <strong>삭제</strong><br>
+            개별 삭제: <strong>해제</strong> 버튼<br>
+            전체 삭제: <strong>모두 해제</strong>
             </li>
 
             <li>
-            <strong>전체 해제:</strong>
-            <strong>모두 해제</strong> 버튼을 누르면 선택된 모든 토지와 표 데이터가 삭제됩니다.
-            </li>
-
-            <li>
-            <strong>엑셀 내보내기:</strong>
-            <strong>엑셀 파일 내보내기</strong> 버튼을 누르면 현재 표의 데이터를 Excel 파일로 저장할 수 있습니다.
+            <strong>데이터 관리</strong><br>
+            엑셀 파일로 내보내거나, 기존 데이터를 가져올 수 있습니다.
             </li>
         </ol>
         </div>
     <div class="left-column-container">
         <div id="map3d" style="width:90%; height:80vh;"></div>
-        <button id="unselectall">모두 해제</button>
+        <div class="map-control-panel">
+            <div class="panel-title">지도 선택 도구</div>
+
+            <div class="status-bar">
+                <span id="active-group-status">현재 그룹: 기본</span>
+                <span id="drag-mode-status">드래그 선택: OFF</span>
+            </div>
+
+            <div class="map-button-row">
+                <button id="toggle-drag-select" class="btn-primary">드래그 선택 켜기</button>
+                <button id="unselectall" class="btn-danger">모두 해제</button>
+            </div>
+        </div>
     </div>
     <div class="right-column-container">
         <div class="address-search-container">
@@ -80,6 +86,8 @@
                 <thead>
                 <tr>
                     <th>해제</th>
+                    <th>그룹</th>
+                    <th>PNU</th>
                     <th>지적구역명</th>
                     <th>지번</th>
                     <th>지형고도코드명</th>
@@ -101,8 +109,28 @@
                 </tbody>
             </table>
         </div>
-        <button id="export-csv">엑셀 파일 내보내기</button>
-        
+        <div class="data-panel">
+            <div class="panel-title">데이터 관리</div>
+            <div class="data-button-row">
+                <button id="export-csv" class="btn-secondary">엑셀 파일 내보내기</button>
+                <input id="import-excel-input" type="file" accept=".xlsx,.xls" style="display:none;">
+                <button id="import-excel-btn" class="btn-secondary">엑셀 파일 가져오기</button>
+            </div>
+        </div>
+
+        <div id="group-controls">
+            <div class="panel-title">그룹 관리</div>
+
+            <div class="group-input-row">
+                <input id="group-name-input" type="text" placeholder="그룹명 입력">
+                <button id="add-group-btn" class="btn-primary">그룹 추가</button>
+            </div>
+
+            <div class="group-helper-text">선택할 그룹을 먼저 누른 뒤 지도에서 토지를 선택하세요.</div>
+
+            <div id="group-list"></div>
+        </div>
+
         <div class="kpi-container">
 
         <div class="kpi-card">
@@ -128,7 +156,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
 <script>
-    const VWORLD_KEY = encodeURIComponent("{{ VWORLD_API_KEY }}");
+    const VWORLD_KEY = "{{ VWORLD_API_KEY }}";
   </script>
 
 

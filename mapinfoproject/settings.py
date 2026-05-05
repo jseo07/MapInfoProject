@@ -168,6 +168,17 @@ try:
 
 except ImportError:
     # Production (no local_settings): use Cloudinary
+
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+    STORAGES = {
+        "default": {
+            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
     for app in ('cloudinary', 'cloudinary_storage'):
         if app not in INSTALLED_APPS:
             INSTALLED_APPS.append(app)

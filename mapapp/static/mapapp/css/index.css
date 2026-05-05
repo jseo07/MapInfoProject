@@ -317,3 +317,302 @@ button:hover {
   font-size: 1.25rem;
   font-weight: 600;
 }
+
+#toggle-drag-select {
+  display: block;
+  width: auto;
+  padding: 0.5rem 1rem;
+  margin: 0;
+}
+
+#toggle-drag-select.active {
+  background-color: #28a745;
+}
+
+#group-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+/* Input + Add button row */
+#group-controls input,
+#group-controls button {
+  font-size: 0.9rem;
+}
+
+/* Input */
+#group-name-input {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 160px;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+#group-name-input:focus {
+  border-color: #007bff;
+}
+
+/* Add button */
+#add-group-btn {
+  padding: 0.45rem 0.8rem;
+  background-color: #007bff;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s ease;
+}
+
+#add-group-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Group list container */
+#group-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+  max-width: 220px;
+}
+
+/* Individual group button */
+.group-select-btn {
+  padding: 0.35rem 0.6rem;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.group-select-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+/* Active group */
+.group-select-btn.active {
+  border: 2px solid #000;
+  font-weight: bold;
+  transform: scale(1.05);
+}
+
+/* Optional: small shadow for depth */
+.group-select-btn {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/*──────────────────────────────────────────────────────────────────────────*/
+/* Dashboard panels                                                        */
+/*──────────────────────────────────────────────────────────────────────────*/
+
+.map-control-panel,
+.data-panel,
+#group-controls {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.9rem 1rem;
+  border: 1px solid #e1e5ea;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+.panel-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 0.65rem;
+}
+
+/*──────────────────────────────────────────────────────────────────────────*/
+/* Active status bar                                                       */
+/*──────────────────────────────────────────────────────────────────────────*/
+
+.status-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.status-bar span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  background: #f1f3f5;
+  color: #333;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+#drag-mode-status.status-on {
+  background: #d4edda;
+  color: #155724;
+}
+
+/*──────────────────────────────────────────────────────────────────────────*/
+/* Button hierarchy                                                        */
+/*──────────────────────────────────────────────────────────────────────────*/
+
+.map-button-row,
+.data-button-row,
+.group-input-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.btn-primary {
+  background-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-secondary {
+  background-color: #495057;
+}
+
+.btn-secondary:hover {
+  background-color: #343a40;
+}
+
+.btn-danger,
+#unselectall {
+  background-color: #dc3545;
+}
+
+.btn-danger:hover,
+#unselectall:hover {
+  background-color: #b02a37;
+}
+
+#toggle-drag-select.active {
+  background-color: #28a745;
+}
+
+#toggle-drag-select.active:hover {
+  background-color: #1e7e34;
+}
+
+/*──────────────────────────────────────────────────────────────────────────*/
+/* Data panel                                                              */
+/*──────────────────────────────────────────────────────────────────────────*/
+
+.data-panel {
+  margin-top: 0.25rem;
+}
+
+.data-button-row button {
+  flex: 1;
+  min-width: 160px;
+}
+
+/*──────────────────────────────────────────────────────────────────────────*/
+/* Group panel redesign                                                    */
+/*──────────────────────────────────────────────────────────────────────────*/
+
+#group-controls {
+  align-items: stretch;
+  width: 100%;
+  margin: 0;
+}
+
+.group-input-row {
+  width: 100%;
+}
+
+#group-name-input {
+  flex: 1;
+  min-width: 160px;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+#add-group-btn {
+  white-space: nowrap;
+  padding: 0.55rem 0.9rem;
+}
+
+.group-helper-text {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.2rem;
+}
+
+#group-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  justify-content: flex-start;
+  max-width: none;
+  margin-top: 0.25rem;
+}
+
+.group-select-btn {
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.16);
+}
+
+.group-select-btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.95;
+}
+
+.group-select-btn.active {
+  border: 2px solid #111;
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.12);
+  transform: scale(1.04);
+}
+
+/*──────────────────────────────────────────────────────────────────────────*/
+/* Remove older conflicting button centering                               */
+/*──────────────────────────────────────────────────────────────────────────*/
+
+#export-csv {
+  margin: 0;
+}
+
+#unselectall,
+#toggle-drag-select {
+  margin: 0;
+}
+
+.data-button-row button {
+  flex: 1;
+  min-width: 160px;
+
+  height: 42px;              /* 🔥 force same height */
+  display: flex;             /* align text perfectly */
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;                /* remove uneven padding */
+  font-weight: 600;
+}
